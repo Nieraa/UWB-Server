@@ -7,7 +7,7 @@ export class Project {
   id: ObjectID;
 
   @Column()
-  title: string;
+  projectName: string;
 
   @Column()
   imgUrl: string;
