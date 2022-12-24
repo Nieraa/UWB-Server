@@ -17,9 +17,9 @@ export class ProjectsController {
   }
 
   @Post()
-  async create(@Body() createProjectDto: CreateProjectDto) {
+  async createProject(@Body() createProjectDto: CreateProjectDto) {
     if ((createProjectDto.projectName !== undefined) && (createProjectDto.imgUrl !== undefined)) {
-      const newProject = this.projectsService.create(createProjectDto);
+      const newProject = this.projectsService.createProject(createProjectDto);
       return newProject;
     }
     else {

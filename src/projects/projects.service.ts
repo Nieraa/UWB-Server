@@ -23,7 +23,7 @@ export class ProjectsService {
     return this.projectsRepository.find();
   }
 
-  async create(createProjectDto: CreateProjectDto) {
+  async createProject(createProjectDto: CreateProjectDto) {
     return this.projectsRepository.save(createProjectDto);
   }
 
