@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Project } from './projects/projects.entity';
+import { Anchor } from './projects/anchor.entity';
+import { Tag } from './projects/tags.entity';
 import { ProjectsModule } from './projects/projects.module';
 
 @Module({
@@ -12,7 +14,7 @@ import { ProjectsModule } from './projects/projects.module';
       host: 'localhost',
       port: 27017,
       database: 'uwb',
-      entities: [Project],
+      entities: [Project, Anchor, Tag],
       synchronize: true,
     }),
     
