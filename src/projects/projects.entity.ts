@@ -11,4 +11,10 @@ export class Project {
 
   @Column()
   imgUrl: string;
+
+  @Column()
+  l: number;
+
+  @Column()
+  w: number;
 }
