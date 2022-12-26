@@ -88,11 +88,11 @@ export class ProjectsController {
 
   @Get(':projectId/colors')
   async getColors(@Param('projectId') projectId: string): Promise<string[]> {
-    return this.projectsService.getColors(projectId);
+    return this.projectsService.getColors(new ObjectID(projectId));
   }
 
   @Get(':projectId/networkSsids')
   async getNetworkSsids(@Param('projectId') projectId: string): Promise<string[]> {
-    return this.projectsService.getNetworkSsids(projectId);
+    return this.projectsService.getNetworkSsids(new ObjectID(projectId));
   }
 }
