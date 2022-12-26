@@ -1,11 +1,16 @@
-import { Body, ConsoleLogger, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
 import { HttpException } from '@nestjs/common/exceptions';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { ProjectsService } from './projects.service';
+import { ObjectID } from 'mongodb';
 import { Project } from './projects.entity';
 import { Anchor } from './anchor.entity';
 import { Tag } from './tags.entity';
+
+import { CreateProjectDto } from './dto/create-project.dto';
+import { CreateAnchorDto } from './dto/create-anchor.dto';
+import { CreateTagDto } from './dto/create-tag.dto';
+
+import { ProjectsService } from './projects.service';
 
 @Controller('projects')
 export class ProjectsController {
@@ -18,7 +23,10 @@ export class ProjectsController {
 
   @Post()
   async createProject(@Body() createProjectDto: CreateProjectDto) {
-    if ((createProjectDto.projectName !== undefined) && (createProjectDto.imgUrl !== undefined)) {
+    if ((createProjectDto.projectName !== undefined) &&
+      (createProjectDto.imgUrl !== undefined) &&
+      (createProjectDto.l !== undefined) &&
+      (createProjectDto.w !== undefined)) {
       const newProject = this.projectsService.createProject(createProjectDto);
       return newProject;
     }
@@ -32,8 +40,58 @@ export class ProjectsController {
     return this.projectsService.getAnchors(projectId);
   }
 
+  @Post(':projectId/anchors')
+  async createAnchor(
+    @Param('projectId') projectId: string,
+    @Body() createAnchorDto: CreateAnchorDto
+  ) {
+    if ((createAnchorDto.name !== undefined) &&
+      (createAnchorDto.ipAddress !== undefined) &&
+      (createAnchorDto.x !== undefined) &&
+      (createAnchorDto.y !== undefined) &&
+      (createAnchorDto.networkSsid !== undefined) &&
+      (createAnchorDto.networkColor !== undefined)) {
+      createAnchorDto.projectId = new ObjectID(projectId);
+      const newAnchor = this.projectsService.createAnchor(createAnchorDto);
+      return newAnchor;
+    }
+    else {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    }
+  }
+
   @Get(':projectId/tags')
   async getTags(@Param('projectId') projectId: string): Promise<Tag[]> {
     return this.projectsService.getTags(projectId);
+  }
+
+  @Post(':projectId/tags')
+  async createTag(
+    @Param('projectId') projectId: string,
+    @Body() createTagDto: CreateTagDto
+  ) {
+    if ((createTagDto.name !== undefined) &&
+      (createTagDto.ipAddress !== undefined) &&
+      (createTagDto.x !== undefined) &&
+      (createTagDto.y !== undefined) &&
+      (createTagDto.networkSsid !== undefined) &&
+      (createTagDto.networkColor !== undefined)) {
+      createTagDto.projectId = new ObjectID(projectId);
+      const newTag = this.projectsService.createTag(createTagDto);
+      return newTag;
+    }
+    else {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get(':projectId/colors')
+  async getColors(@Param('projectId') projectId: string): Promise<string[]> {
+    return this.projectsService.getColors(projectId);
+  }
+
+  @Get(':projectId/networkSsids')
+  async getNetworkSsids(@Param('projectId') projectId: string): Promise<string[]> {
+    return this.projectsService.getNetworkSsids(projectId);
   }
 }
