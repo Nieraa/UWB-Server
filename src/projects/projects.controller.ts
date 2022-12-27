@@ -13,6 +13,8 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { CreateAnchorDto } from './dto/create-anchor.dto';
 import { CreateTagDto } from './dto/create-tag.dto';
 
+import { ParseObjectIdPipe } from 'src/common/pipes';
+
 @Controller('projects')
 export class ProjectsController {
   constructor(private projectsService: ProjectsService) { }
@@ -24,75 +26,44 @@ export class ProjectsController {
 
   @Post()
   async createProject(@Body() createProjectDto: CreateProjectDto) {
-    if ((createProjectDto.projectName !== undefined) &&
-      (createProjectDto.imgUrl !== undefined) &&
-      (createProjectDto.l !== undefined) &&
-      (createProjectDto.w !== undefined)) {
-      const newProject = this.projectsService.createProject(createProjectDto);
-      return newProject;
-    }
-    else {
-      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-    }
+    return this.projectsService.createProject(createProjectDto);
   }
 
   @Get(':projectId/anchors')
-  async getAnchors(@Param('projectId') projectId: string): Promise<Anchor[]> {
+  async getAnchors(@Param('projectId', ParseObjectIdPipe) projectId: ObjectID): Promise<Anchor[]> {
     return this.projectsService.getAnchors(projectId);
   }
 
   @Post(':projectId/anchors')
   async createAnchor(
-    @Param('projectId') projectId: string,
+    @Param('projectId', ParseObjectIdPipe) projectId: ObjectID,
     @Body() createAnchorDto: CreateAnchorDto
   ) {
-    if ((createAnchorDto.name !== undefined) &&
-      (createAnchorDto.ipAddress !== undefined) &&
-      (createAnchorDto.x !== undefined) &&
-      (createAnchorDto.y !== undefined) &&
-      (createAnchorDto.networkSsid !== undefined) &&
-      (createAnchorDto.networkColor !== undefined)) {
-      createAnchorDto.projectId = new ObjectID(projectId);
-      const newAnchor = this.projectsService.createAnchor(createAnchorDto);
-      return newAnchor;
-    }
-    else {
-      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-    }
+    createAnchorDto.projectId = projectId;
+    return this.projectsService.createAnchor(createAnchorDto);
   }
 
   @Get(':projectId/tags')
-  async getTags(@Param('projectId') projectId: string): Promise<Tag[]> {
+  async getTags(@Param('projectId', ParseObjectIdPipe) projectId: ObjectID): Promise<Tag[]> {
     return this.projectsService.getTags(projectId);
   }
 
   @Post(':projectId/tags')
   async createTag(
-    @Param('projectId') projectId: string,
+    @Param('projectId', ParseObjectIdPipe) projectId: ObjectID,
     @Body() createTagDto: CreateTagDto
   ) {
-    if ((createTagDto.name !== undefined) &&
-      (createTagDto.ipAddress !== undefined) &&
-      (createTagDto.x !== undefined) &&
-      (createTagDto.y !== undefined) &&
-      (createTagDto.networkSsid !== undefined) &&
-      (createTagDto.networkColor !== undefined)) {
-      createTagDto.projectId = new ObjectID(projectId);
-      const newTag = this.projectsService.createTag(createTagDto);
-      return newTag;
-    }
-    else {
-      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-    }
+    createTagDto.projectId = projectId;
+    return this.projectsService.createTag(createTagDto);
   }
 
   @Get(':projectId/colors')
-  async getColors(@Param('projectId') projectId: string): Promise<string[]> {
-    return this.projectsService.getColors(new ObjectID(projectId));
+  async getColors(@Param('projectId', ParseObjectIdPipe) projectId: ObjectID): Promise<string[]> {
+    return this.projectsService.getColors(projectId);
   }
 
   @Get(':projectId/networkSsids')
-  async getNetworkSsids(@Param('projectId') projectId: string): Promise<string[]> {
-    return this.projectsService.getNetworkSsids(new ObjectID(projectId));
+  async getNetworkSsids(@Param('projectId', ParseObjectIdPipe) projectId: ObjectID): Promise<string[]> {
+    return this.projectsService.getNetworkSsids(projectId);
   }
 }

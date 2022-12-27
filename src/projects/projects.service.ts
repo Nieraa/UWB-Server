@@ -32,23 +32,23 @@ export class ProjectsService {
     return this.projectsRepository.save(createProjectDto);
   }
 
-  async getAnchors(projectId: string): Promise<Anchor[]> {
-    return this.anchorsRepository.find({ where: { projectId: new ObjectID(projectId) } });
+  async getAnchors(projectId: ObjectID): Promise<Anchor[]> {
+    return this.anchorsRepository.find({ where: { projectId: projectId } });
   }
 
   async createAnchor(createAnchorDto: CreateAnchorDto) {
     return this.anchorsRepository.save(createAnchorDto);
   }
 
-  async getTags(projectId: string): Promise<Tag[]> {
-    return this.tagsRepository.find({ where: { projectId: new ObjectID(projectId) } });
+  async getTags(projectId: ObjectID): Promise<Tag[]> {
+    return this.tagsRepository.find({ where: { projectId: projectId } });
   }
 
   async createTag(createTagDto: CreateTagDto) {
     return this.tagsRepository.save(createTagDto);
   }
 
-  async getColors(projectId: string): Promise<string[]> {
+  async getColors(projectId: ObjectID): Promise<string[]> {
     const anchors = this.anchorsRepository.find({ where: { projectId: projectId } });
     const tags = this.tagsRepository.find({ where: { projectId: projectId } });
     const anchorColors = (await anchors).map((element: Anchor) => element.networkColor);
@@ -57,7 +57,7 @@ export class ProjectsService {
     return [...new Set([...anchorColors, ...tagColors])];
   }
 
-  async getNetworkSsids(projectId: string): Promise<string[]> {
+  async getNetworkSsids(projectId: ObjectID): Promise<string[]> {
     const anchors = this.anchorsRepository.find({ where: { projectId: projectId } });
     const tags = this.tagsRepository.find({ where: { projectId: projectId } });
     const anchorNetworkSsids = (await anchors).map((element: Anchor) => element.networkSsid);
