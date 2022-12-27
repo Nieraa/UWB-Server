@@ -1,6 +1,4 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { HttpStatus } from '@nestjs/common/enums';
-import { HttpException } from '@nestjs/common/exceptions';
 import { ObjectID } from 'mongodb';
 
 import { ProjectsService } from './projects.service';
