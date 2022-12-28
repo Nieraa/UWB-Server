@@ -46,6 +46,11 @@ export class ProjectsController {
     return this.projectsService.createAnchor(createAnchorDto);
   }
 
+  @Delete(':projectId/anchors/:anchorId')
+  async deleteAnchor(@Param('anchorId', ParseObjectIdPipe) anchorId: ObjectID) {
+    return this.projectsService.deleteAnchor(anchorId);
+  }
+
   @Get(':projectId/tags')
   async getTags(@Param('projectId', ParseObjectIdPipe) projectId: ObjectID): Promise<Tag[]> {
     return this.projectsService.getTags(projectId);
@@ -58,6 +63,11 @@ export class ProjectsController {
   ) {
     createTagDto.projectId = projectId;
     return this.projectsService.createTag(createTagDto);
+  }
+
+  @Delete(':projectId/anchors/:tagId')
+  async deleteTag(@Param('tagId', ParseObjectIdPipe) tagId: ObjectID) {
+    return this.projectsService.deleteTag(tagId);
   }
 
   @Get(':projectId/colors')

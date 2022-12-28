@@ -44,12 +44,20 @@ export class ProjectsService {
     return this.anchorsRepository.save(createAnchorDto);
   }
 
+  async deleteAnchor(anchorId: ObjectID): Promise<DeleteResult> {
+    return this.anchorsRepository.delete({ id: anchorId });
+  }
+
   async getTags(projectId: ObjectID): Promise<Tag[]> {
     return this.tagsRepository.find({ where: { projectId: projectId } });
   }
 
   async createTag(createTagDto: CreateTagDto) {
     return this.tagsRepository.save(createTagDto);
+  }
+
+  async deleteTag(tagId: ObjectID): Promise<DeleteResult> {
+    return this.tagsRepository.delete({ id: tagId });
   }
 
   async getColors(projectId: ObjectID): Promise<string[]> {
