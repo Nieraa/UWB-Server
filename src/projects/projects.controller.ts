@@ -65,7 +65,7 @@ export class ProjectsController {
     return this.projectsService.createTag(createTagDto);
   }
 
-  @Delete(':projectId/anchors/:tagId')
+  @Delete(':projectId/tags/:tagId')
   async deleteTag(@Param('tagId', ParseObjectIdPipe) tagId: ObjectID) {
     return this.projectsService.deleteTag(tagId);
   }
