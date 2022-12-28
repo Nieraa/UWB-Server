@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ObjectID } from "mongodb";
 
@@ -30,6 +30,10 @@ export class ProjectsService {
 
   async createProject(createProjectDto: CreateProjectDto) {
     return this.projectsRepository.save(createProjectDto);
+  }
+
+  async deleteProject(projectId: ObjectID): Promise<DeleteResult> {
+    return this.projectsRepository.delete({ id: projectId });
   }
 
   async getAnchors(projectId: ObjectID): Promise<Anchor[]> {
