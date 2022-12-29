@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Controller, Param, Body, Get, Post, Patch, Delete } from '@nestjs/common';
 import { ObjectID } from 'mongodb';
 
 import { ProjectsService } from './projects.service';
@@ -25,6 +25,14 @@ export class ProjectsController {
   @Post()
   async createProject(@Body() createProjectDto: CreateProjectDto) {
     return this.projectsService.createProject(createProjectDto);
+  }
+
+  @Patch(':projectId')
+  async updateProject(
+    @Param('projectId', ParseObjectIdPipe) projectId: ObjectID,
+    @Body() createProjectDto: CreateProjectDto
+  ) {
+    return this.projectsService.updateProject(projectId, createProjectDto);
   }
 
   @Delete(':projectId')

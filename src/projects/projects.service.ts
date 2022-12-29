@@ -32,6 +32,10 @@ export class ProjectsService {
     return this.projectsRepository.save(createProjectDto);
   }
 
+  async updateProject(projectId: ObjectID, createProjectDto: CreateProjectDto) {
+    return this.projectsRepository.update({ id: projectId }, createProjectDto);
+  }
+
   async deleteProject(projectId: ObjectID): Promise<DeleteResult> {
     return this.projectsRepository.delete({ id: projectId });
   }
