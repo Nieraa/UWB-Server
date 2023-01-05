@@ -54,6 +54,16 @@ export class ProjectsController {
     return this.projectsService.createAnchor(createAnchorDto);
   }
 
+  @Patch(':projectId')
+  async updateAnchor(
+    @Param('projectId', ParseObjectIdPipe) projectId: ObjectID,
+    @Param('anchorId', ParseObjectIdPipe) anchorId: ObjectID,
+    @Body() createAnchorDto: CreateAnchorDto
+  ) {
+    createAnchorDto.projectId = projectId;
+    return this.projectsService.updateAnchor(anchorId, createAnchorDto);
+  }
+
   @Delete(':projectId/anchors/:anchorId')
   async deleteAnchor(@Param('anchorId', ParseObjectIdPipe) anchorId: ObjectID) {
     return this.projectsService.deleteAnchor(anchorId);

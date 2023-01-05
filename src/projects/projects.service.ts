@@ -48,6 +48,10 @@ export class ProjectsService {
     return this.anchorsRepository.save(createAnchorDto);
   }
 
+  async updateAnchor(anchorId: ObjectID, createAnchorDto: CreateAnchorDto) {
+    return this.anchorsRepository.update({ id: anchorId }, createAnchorDto);
+  }
+
   async deleteAnchor(anchorId: ObjectID): Promise<DeleteResult> {
     return this.anchorsRepository.delete({ id: anchorId });
   }
