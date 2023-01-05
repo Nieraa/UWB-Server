@@ -22,6 +22,9 @@ export class Tag {
   y: number;
 
   @Column()
+  z: number;
+
+  @Column()
   networkSsid: string;
 
   @Column()

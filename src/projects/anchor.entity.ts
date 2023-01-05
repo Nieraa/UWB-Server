@@ -22,6 +22,9 @@ export class Anchor {
   y: number;
 
   @Column()
+  z: number;
+
+  @Column()
   networkSsid: string;
 
   @Column()

@@ -21,6 +21,10 @@ export class CreateAnchorDto {
   y: number;
 
   @IsNotEmpty()
+  @IsNumber()
+  z: number;
+
+  @IsNotEmpty()
   @IsString()
   networkSsid: string;
 
