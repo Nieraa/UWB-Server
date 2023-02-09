@@ -1,88 +1,60 @@
-import { Injectable } from "@nestjs/common";
-import { DeleteResult, Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
-import { ObjectID } from "mongodb";
-
-import { Project } from "./projects.entity";
-import { Anchor } from "./anchor.entity";
-import { Tag } from "./tags.entity";
-
-import { CreateProjectDto } from "./dto/create-project.dto";
-import { CreateAnchorDto } from "./dto/create-anchor.dto";
-import { CreateTagDto } from "./dto/create-tag.dto";
+import { Injectable } from '@nestjs/common';
+import * as admin from 'firebase-admin';
+import { CreateProjectDto } from './dto/create-project-dto';
+import { UpdateProjectDto } from './dto/update-project-dto';
+import { Project } from './projects.entity';
 
 @Injectable()
 export class ProjectsService {
-  constructor(
-    @InjectRepository(Project)
-    private projectsRepository: Repository<Project>,
-
-    @InjectRepository(Anchor)
-    private anchorsRepository: Repository<Anchor>,
-
-    @InjectRepository(Tag)
-    private tagsRepository: Repository<Tag>
-  ) { }
-
-  async findAll(): Promise<Project[]> {
-    return this.projectsRepository.find();
+  async getProjects(): Promise<Project[]> {
+    const db = admin.database();
+    const projectsRef = db.ref('/projects');
+    return await projectsRef.once('value').then((projectsSnapshot) => {
+      const projects: Project[] = projectsSnapshot.val() !== null ?
+        Object.values(projectsSnapshot.val()) 
+        : 
+        [];
+      projects.forEach(project => {
+        delete project.roomPlans
+      })
+      return projects;
+    });
   }
 
-  async createProject(createProjectDto: CreateProjectDto) {
-    return this.projectsRepository.save(createProjectDto);
+  async createProject(createProjectDto: CreateProjectDto): Promise<string> {
+    const db = admin.database();
+    const projectsRef = db.ref('/projects');
+    const key = projectsRef.push(createProjectDto).key;
+    const newProjectRef = db.ref(`/projects/${key}`);
+    newProjectRef.update({ id: key })
+    return key;
   }
 
-  async updateProject(projectId: ObjectID, createProjectDto: CreateProjectDto) {
-    return this.projectsRepository.update({ id: projectId }, createProjectDto);
+  async updateProjectName(
+    projectId: string,
+    updateProjectDto: UpdateProjectDto
+  ): Promise<void> {
+    const db = admin.database();
+    const projectRef = db.ref(`/projects/${projectId}`);
+    projectRef.update(updateProjectDto);
   }
 
-  async deleteProject(projectId: ObjectID): Promise<DeleteResult> {
-    return this.projectsRepository.delete({ id: projectId });
+  async deleteProject(projectId: string): Promise<void> {
+    const db = admin.database();
+    const projectRef = db.ref(`/projects/${projectId}`);
+    projectRef.set({});
   }
 
-  async getAnchors(projectId: ObjectID): Promise<Anchor[]> {
-    return this.anchorsRepository.find({ where: { projectId: projectId } });
-  }
-
-  async createAnchor(createAnchorDto: CreateAnchorDto) {
-    return this.anchorsRepository.save(createAnchorDto);
-  }
-
-  async updateAnchor(anchorId: ObjectID, createAnchorDto: CreateAnchorDto) {
-    return this.anchorsRepository.update({ id: anchorId }, createAnchorDto);
-  }
-
-  async deleteAnchor(anchorId: ObjectID): Promise<DeleteResult> {
-    return this.anchorsRepository.delete({ id: anchorId });
-  }
-
-  async getTags(projectId: ObjectID): Promise<Tag[]> {
-    return this.tagsRepository.find({ where: { projectId: projectId } });
-  }
-
-  async createTag(createTagDto: CreateTagDto) {
-    return this.tagsRepository.save(createTagDto);
-  }
-
-  async deleteTag(tagId: ObjectID): Promise<DeleteResult> {
-    return this.tagsRepository.delete({ id: tagId });
-  }
-
-  async getColors(projectId: ObjectID): Promise<string[]> {
-    const anchors = this.anchorsRepository.find({ where: { projectId: projectId } });
-    const tags = this.tagsRepository.find({ where: { projectId: projectId } });
-    const anchorColors = (await anchors).map((element: Anchor) => element.networkColor);
-    const tagColors = (await tags).map((element: Tag) => element.networkColor);
-
-    return [...new Set([...anchorColors, ...tagColors])];
-  }
-
-  async getNetworkSsids(projectId: ObjectID): Promise<string[]> {
-    const anchors = this.anchorsRepository.find({ where: { projectId: projectId } });
-    const tags = this.tagsRepository.find({ where: { projectId: projectId } });
-    const anchorNetworkSsids = (await anchors).map((element: Anchor) => element.networkSsid);
-    const tagNetworkSsids = (await tags).map((element: Tag) => element.networkSsid);
-
-    return [...new Set([...anchorNetworkSsids, ...tagNetworkSsids])];
+  async getProjectbyId(projectId: string): Promise<Project> {
+    const db = admin.database();
+    const projectRef = db.ref(`/projects/${projectId}`);
+    return await projectRef.once('value').then((projectSnapshot) => {
+      const project: Project = projectSnapshot.val() !== null ? projectSnapshot.val() : {
+        id: "",
+        name: ""
+      };
+      delete project.roomPlans
+      return project;
+    });
   }
 }

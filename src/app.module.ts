@@ -1,29 +1,13 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-
-import { ProjectsModule } from './projects/projects.module';
-
 import { AppController } from './app.controller';
-
 import { AppService } from './app.service';
-
-import { Project } from './projects/projects.entity';
-import { Anchor } from './projects/anchor.entity';
-import { Tag } from './projects/tags.entity';
+import { ConfigModule } from '@nestjs/config';
+import { ProjectsModule } from './projects/projects.module';
+import { RoomPlansModule } from './roomPlans/roomPlans.module';
+import { AnchorsModule } from './anchors/anchors.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot({
-      type: 'mongodb',
-      host: 'localhost',
-      port: 27017,
-      database: 'uwb',
-      entities: [Project, Anchor, Tag],
-      synchronize: true,
-    }),
-    
-    ProjectsModule
-  ],
+  imports: [ConfigModule.forRoot(), ProjectsModule, RoomPlansModule, AnchorsModule],
   controllers: [AppController],
   providers: [AppService],
 })
