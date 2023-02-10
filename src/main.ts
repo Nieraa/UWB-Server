@@ -3,19 +3,17 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ServiceAccount } from 'firebase-admin';
 
-import {
-  ExpressAdapter,
-  NestExpressApplication,
-} from '@nestjs/platform-express';
+import { ExpressAdapter } from '@nestjs/platform-express';
 import * as admin from 'firebase-admin';
 import * as express from 'express';
 import * as functions from 'firebase-functions';
 import { ValidationPipe } from '@nestjs/common';
 
-const expressServer: express.Express = express();
+const expressServer = express();
+
 
 export const createFunction = async (expressInstance: express.Express) => {
-  const app = await NestFactory.create<NestExpressApplication>(
+  const app = await NestFactory.create(
     AppModule,
     new ExpressAdapter(expressInstance)
   );
@@ -36,10 +34,10 @@ export const createFunction = async (expressInstance: express.Express) => {
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(configService.get<string>('API_PORT') || 5000);
-  return app.init();
+  await app.init();
 };
 
-createFunction(expressServer)
-  .then((v) => console.log('Nest Ready'))
-  .catch((err) => console.error('Nest broken', err));
-export const api: functions.HttpsFunction = functions.https.onRequest(expressServer);
+export const api = functions.https.onRequest(async (request, response) => {
+  await createFunction(expressServer);
+  expressServer(request, response);
+});
