@@ -26,14 +26,16 @@ export const createFunction = async (expressInstance: express.Express) => {
     clientEmail: configService.get<string>('CLIENT_EMAIL'),
   };
   // Initialize the firebase admin app
-  admin.initializeApp({
-    credential: admin.credential.cert(adminConfig),
-    databaseURL: `https://${adminConfig.projectId}-default-rtdb.asia-southeast1.firebasedatabase.app/`,
-  });
+
+  if (admin.apps.length === 0) {
+    admin.initializeApp({
+      credential: admin.credential.cert(adminConfig),
+      databaseURL: `https://${adminConfig.projectId}-default-rtdb.asia-southeast1.firebasedatabase.app/`,
+    });
+  }
 
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(configService.get<string>('API_PORT') || 5000);
   await app.init();
 };
 
