@@ -21,14 +21,13 @@ export class AnchorsService {
   }
 
   async createAnchor(
-    projectId: string,
     roomPlanId: string,
     createAnchorDto: CreateAnchorDto
   ): Promise<string> {
     const db = admin.database();
-    const anchorsRef = db.ref(`/projects/${projectId}/roomPlans/${roomPlanId}/anchors`);
+    const anchorsRef = db.ref(`/roomPlan-anchors/${roomPlanId}`);
     const key = anchorsRef.push(createAnchorDto).key;
-    const newAnchorRef = db.ref(`/projects/${projectId}/roomPlans/${roomPlanId}/anchors/${key}`)
+    const newAnchorRef = db.ref(`/roomPlan-anchors/${roomPlanId}/${key}`)
     newAnchorRef.update({ id: key });
     return key;
   }
