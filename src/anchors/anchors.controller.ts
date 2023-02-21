@@ -21,10 +21,9 @@ export class AnchorsController {
 
   @Get()
   async getAnchors(
-    @Param('projectId') projectId: string,
     @Param('roomPlanId') roomPlanId: string
     ): Promise<Anchor[]> {
-    return this.anchorsService.getAnchors(projectId, roomPlanId);
+    return this.anchorsService.getAnchors(roomPlanId);
   }
 
   @Post()
