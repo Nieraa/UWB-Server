@@ -43,21 +43,23 @@ export class ProjectsService {
   async deleteProject(
     userId: string,
     projectId: string
-    ): Promise<void> {
+  ): Promise<void> {
     const db = admin.database();
     const projectRef = db.ref(`/user-projects/${userId}/${projectId}`);
     projectRef.set({});
   }
 
-  async getProjectbyId(projectId: string): Promise<Project> {
+  async getProjectbyId(
+    userId: string,
+    projectId: string
+  ): Promise<Project> {
     const db = admin.database();
-    const projectRef = db.ref(`/projects/${projectId}`);
+    const projectRef = db.ref(`/user-projects/${userId}/${projectId}`);
     return await projectRef.once('value').then((projectSnapshot) => {
       const project: Project = projectSnapshot.val() !== null ? projectSnapshot.val() : {
         id: "",
         name: ""
       };
-      delete project.roomPlans
       return project;
     });
   }

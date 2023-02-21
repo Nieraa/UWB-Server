@@ -45,12 +45,15 @@ export class ProjectsController {
   async deleteProject(
     @Param('userId') userId: string,
     @Param('projectId') projectId: string
-    ): Promise<void> {
+  ): Promise<void> {
     return this.projectsService.deleteProject(userId, projectId);
   }
 
   @Get(':projectId')
-  async getProjectbyId(@Param('projectId') projectId: string): Promise<Project> {
-    return this.projectsService.getProjectbyId(projectId);
+  async getProjectbyId(
+    @Param('userId') userId: string,
+    @Param('projectId') projectId: string
+  ): Promise<Project> {
+    return this.projectsService.getProjectbyId(userId ,projectId);
   }
 }
