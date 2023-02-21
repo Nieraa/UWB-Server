@@ -33,13 +33,12 @@ export class AnchorsService {
   }
 
   async updateAnchor(
-    projectId: string,
     roomPlanId: string,
     anchorId: string,
     updateAnchorDto: UpdateAnchorDto
   ): Promise<void> {
     const db = admin.database();
-    const anchorRef = db.ref(`/projects/${projectId}/roomPlans/${roomPlanId}/anchors/${anchorId}`);
+    const anchorRef = db.ref(`/roomPlan-anchors/${roomPlanId}/${anchorId}`);
     anchorRef.update(updateAnchorDto);
   }
 
