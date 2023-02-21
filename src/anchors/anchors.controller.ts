@@ -6,12 +6,15 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateAnchorDto } from './dto/create-anchor-dto';
 import { UpdateAnchorDto } from './dto/update-anchor-dto';
 import { Anchor } from './anchors.entity';
 import { AnchorsService } from './anchors.service';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('projects/:projectId/roomPlans/:roomPlanId/anchors')
 export class AnchorsController {
   constructor(private readonly anchorsService: AnchorsService) { }

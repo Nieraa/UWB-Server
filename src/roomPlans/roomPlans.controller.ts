@@ -6,12 +6,15 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateRoomPlanDto } from './dto/create-roomPlan-dto';
 import { UpdateRoomPlanDto } from './dto/update-roomPlan-dto';
 import { RoomPlan } from './roomPlans.entity';
 import { RoomPlansService } from './roomPlans.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('projects/:projectId/roomPlans')
 export class RoomPlansController {
   constructor(private readonly roomPlansService: RoomPlansService) { }
