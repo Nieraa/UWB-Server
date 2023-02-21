@@ -33,11 +33,12 @@ export class ProjectsController {
   }
 
   @Patch(':projectId')
-  async updateProjectName(
+  async updateProject(
+    @Param('userId') userId: string,
     @Param('projectId') projectId: string,
     @Body() updateProjectDto: UpdateProjectDto
   ): Promise<void> {
-    return this.projectsService.updateProjectName(projectId, updateProjectDto);
+    return this.projectsService.updateProject(userId, projectId, updateProjectDto);
   }
 
   @Delete(':projectId')

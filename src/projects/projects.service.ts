@@ -30,12 +30,13 @@ export class ProjectsService {
     return key;
   }
 
-  async updateProjectName(
+  async updateProject(
+    userId: string,
     projectId: string,
     updateProjectDto: UpdateProjectDto
   ): Promise<void> {
     const db = admin.database();
-    const projectRef = db.ref(`/projects/${projectId}`);
+    const projectRef = db.ref(`/user-projects/${userId}/${projectId}`);
     projectRef.update(updateProjectDto);
   }
 
