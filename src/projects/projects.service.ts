@@ -6,17 +6,14 @@ import { Project } from './projects.entity';
 
 @Injectable()
 export class ProjectsService {
-  async getProjects(): Promise<Project[]> {
+  async getProjects(userId: string): Promise<Project[]> {
     const db = admin.database();
-    const projectsRef = db.ref('/projects');
+    const projectsRef = db.ref(`/user-projects/${userId}`);
     return await projectsRef.once('value').then((projectsSnapshot) => {
       const projects: Project[] = projectsSnapshot.val() !== null ?
         Object.values(projectsSnapshot.val()) 
         : 
         [];
-      projects.forEach(project => {
-        delete project.roomPlans
-      })
       return projects;
     });
   }
