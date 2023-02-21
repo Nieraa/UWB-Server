@@ -36,12 +36,11 @@ export class AnchorsController {
 
   @Patch(':anchorId')
   async updateAnchor(
-    @Param('projectId') projectId: string,
     @Param('roomPlanId') roomPlanId: string,
     @Param('anchorId') anchorId: string,
     @Body() updateAnchorDto: UpdateAnchorDto
   ): Promise<void> {
-    return this.anchorsService.updateAnchor(projectId, roomPlanId, anchorId, updateAnchorDto);
+    return this.anchorsService.updateAnchor(roomPlanId, anchorId, updateAnchorDto);
   }
 
   @Delete(':anchorId')
