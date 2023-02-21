@@ -3,7 +3,6 @@ import { RoomPlansController } from './roomPlans.controller';
 import { RoomPlansService } from './roomPlans.service';
 
 @Module({
-  imports: [],
   controllers: [RoomPlansController],
   providers: [RoomPlansService],
 })
