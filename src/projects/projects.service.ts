@@ -40,9 +40,12 @@ export class ProjectsService {
     projectRef.update(updateProjectDto);
   }
 
-  async deleteProject(projectId: string): Promise<void> {
+  async deleteProject(
+    userId: string,
+    projectId: string
+    ): Promise<void> {
     const db = admin.database();
-    const projectRef = db.ref(`/projects/${projectId}`);
+    const projectRef = db.ref(`/user-projects/${userId}/${projectId}`);
     projectRef.set({});
   }
 
