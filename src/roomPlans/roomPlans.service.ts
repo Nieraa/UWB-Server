@@ -54,7 +54,7 @@ export class RoomPlansService {
     roomPlanId: string
   ): Promise<RoomPlan> {
     const db = admin.database();
-    const roomPlanRef = db.ref(`/projects/${projectId}/roomPlans/${roomPlanId}`);
+    const roomPlanRef = db.ref(`/project-roomPlans/${projectId}/${roomPlanId}`);
     return await roomPlanRef.once('value').then((roomPlanSnapshot) => {
       const roomPlan: RoomPlan = roomPlanSnapshot.val() !== null ? roomPlanSnapshot.val() : {
         id: "",
@@ -65,7 +65,6 @@ export class RoomPlansService {
         xOrigin: 0,
         yOrigin: 0
       };
-      delete roomPlan.anchors
       return roomPlan;
     });
   }
