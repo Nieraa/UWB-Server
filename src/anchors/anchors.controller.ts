@@ -28,11 +28,10 @@ export class AnchorsController {
 
   @Post()
   async createAnchor(
-    @Param('projectId') projectId: string,
     @Param('roomPlanId') roomPlanId: string,
     @Body() createAnchorDto: CreateAnchorDto
   ): Promise<string> {
-    return this.anchorsService.createAnchor(projectId, roomPlanId, createAnchorDto);
+    return this.anchorsService.createAnchor(roomPlanId, createAnchorDto);
   }
 
   @Patch(':anchorId')
