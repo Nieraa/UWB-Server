@@ -45,10 +45,9 @@ export class AnchorsController {
 
   @Delete(':anchorId')
   async deleteAnchor(
-    @Param('projectId') projectId: string,
     @Param('roomPlanId') roomPlanId: string,
     @Param('anchorId') anchorId: string
   ): Promise<void> {
-    return this.anchorsService.deleteAnchor(projectId, roomPlanId, anchorId);
+    return this.anchorsService.deleteAnchor(roomPlanId, anchorId);
   }
 }
