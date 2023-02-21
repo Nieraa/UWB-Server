@@ -15,7 +15,7 @@ import { RoomPlan } from './roomPlans.entity';
 import { RoomPlansService } from './roomPlans.service';
 
 @UseGuards(JwtAuthGuard)
-@Controller('projects/:projectId/roomPlans')
+@Controller(':userId/projects/:projectId/roomPlans')
 export class RoomPlansController {
   constructor(private readonly roomPlansService: RoomPlansService) { }
 

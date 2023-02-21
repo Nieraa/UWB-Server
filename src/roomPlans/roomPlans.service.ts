@@ -23,10 +23,10 @@ export class RoomPlansService {
     createRoomPlanDto: CreateRoomPlanDto
   ): Promise<string> {
     const db = admin.database();
-    const roomPlansRef = db.ref(`/projects/${projectId}/roomPlans`);
+    const roomPlansRef = db.ref(`/project-roomPlans/${projectId}`);
     const key = roomPlansRef.push(createRoomPlanDto).key;
-    const newRoomPlanRef = db.ref(`/projects/${projectId}/roomPlans/${key}`)
-    newRoomPlanRef.update({ id: key });
+    const newRoomPlanRef = db.ref(`/project-roomPlans/${projectId}/${key}`);
+    newRoomPlanRef.update({ id: key })
     return key;
   }
 
