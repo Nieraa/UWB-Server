@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import { CreateUserDto } from './dto/create-user-dto';
 
 export type User = any;
 
@@ -16,18 +17,26 @@ export class UsersService {
       });
   }
 
+  async signup(createUserDto: CreateUserDto): Promise<void> {
+    const db = admin.database();
+    const usersRef = db.ref('/users');
+    const key = usersRef.push(createUserDto).key;
+    const newUsernameRef = db.ref(`/usernames/${key}`);
+    newUsernameRef.set(createUserDto.username);
+  }
+
   async findUser(username: string): Promise<User> {
     const db = admin.database();
     const usersRef = db.ref(`/users`);
     return await usersRef
-    .orderByChild('username')
-    .equalTo(username)
-    .limitToLast(1)
-    .once('value')
-    .then((userSnapshot) => {
-      const user: User = Object.values(userSnapshot.val())[0];
-      user.id = Object.keys(userSnapshot.val())[0];
-      return user;
-    });
+      .orderByChild('username')
+      .equalTo(username)
+      .limitToLast(1)
+      .once('value')
+      .then((userSnapshot) => {
+        const user: User = Object.values(userSnapshot.val())[0];
+        user.id = Object.keys(userSnapshot.val())[0];
+        return user;
+      });
   }
 }
