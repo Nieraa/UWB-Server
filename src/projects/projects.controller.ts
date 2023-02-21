@@ -15,13 +15,13 @@ import { Project } from './projects.entity';
 import { ProjectsService } from './projects.service';
 
 @UseGuards(JwtAuthGuard)
-@Controller('projects')
+@Controller(':userId/projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Get()
-  async getProjects(): Promise<Project[]> {
-    return this.projectsService.getProjects();
+  async getProjects(@Param('userId') userId: string): Promise<Project[]> {
+    return this.projectsService.getProjects(userId);
   }
 
   @Post()
