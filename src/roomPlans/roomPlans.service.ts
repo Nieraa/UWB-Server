@@ -36,7 +36,7 @@ export class RoomPlansService {
     updateRoomPlanDto: UpdateRoomPlanDto
   ): Promise<void> {
     const db = admin.database();
-    const roomPlanRef = db.ref(`/projects/${projectId}/roomPlans/${roomPlanId}`);
+    const roomPlanRef = db.ref(`/project-roomPlans/${projectId}/${roomPlanId}`);
     roomPlanRef.update(updateRoomPlanDto);
   }
 
