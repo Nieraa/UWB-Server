@@ -7,13 +7,15 @@ import { Anchor } from './anchors.entity';
 @Injectable()
 export class AnchorsService {
   async getAnchors(
-    projectId: string,
     roomPlanId: string
     ): Promise<Anchor[]> {
     const db = admin.database();
-    const anchorsRef = db.ref(`/projects/${projectId}/roomPlans/${roomPlanId}/anchors`);
+    const anchorsRef = db.ref(`/roomPlan-anchors/${roomPlanId}`);
     return await anchorsRef.once('value').then((anchorsSnapshot) => {
-      const anchors: Anchor[] = anchorsSnapshot.val() !== null ? Object.values(anchorsSnapshot.val()) : [];
+      const anchors: Anchor[] = anchorsSnapshot.val() !== null ?
+      Object.values(anchorsSnapshot.val())
+      :
+      [];
       return anchors;
     });
   }
