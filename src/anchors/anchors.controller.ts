@@ -15,7 +15,7 @@ import { AnchorsService } from './anchors.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
-@Controller('projects/:projectId/roomPlans/:roomPlanId/anchors')
+@Controller(':userId/projects/:projectId/roomPlans/:roomPlanId/anchors')
 export class AnchorsController {
   constructor(private readonly anchorsService: AnchorsService) { }
 
