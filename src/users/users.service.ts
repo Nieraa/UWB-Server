@@ -22,7 +22,7 @@ export class UsersService {
     const usersRef = db.ref('/users');
     const key = usersRef.push(createUserDto).key;
     const newUsernameRef = db.ref(`/usernames/${key}`);
-    newUsernameRef.set(createUserDto.username);
+    newUsernameRef.set({ username: createUserDto.username });
   }
 
   async findUser(username: string): Promise<User> {
