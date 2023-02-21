@@ -17,7 +17,7 @@ import { ProjectsService } from './projects.service';
 @UseGuards(JwtAuthGuard)
 @Controller(':userId/projects')
 export class ProjectsController {
-  constructor(private readonly projectsService: ProjectsService) {}
+  constructor(private readonly projectsService: ProjectsService) { }
 
   @Get()
   async getProjects(@Param('userId') userId: string): Promise<Project[]> {
@@ -25,8 +25,11 @@ export class ProjectsController {
   }
 
   @Post()
-  async createProject(@Body() createProjectDto: CreateProjectDto): Promise<string> {
-    return this.projectsService.createProject(createProjectDto);
+  async createProject(
+    @Param('userId') userId: string,
+    @Body() createProjectDto: CreateProjectDto
+  ): Promise<string> {
+    return this.projectsService.createProject(userId, createProjectDto);
   }
 
   @Patch(':projectId')

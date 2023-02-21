@@ -11,18 +11,21 @@ export class ProjectsService {
     const projectsRef = db.ref(`/user-projects/${userId}`);
     return await projectsRef.once('value').then((projectsSnapshot) => {
       const projects: Project[] = projectsSnapshot.val() !== null ?
-        Object.values(projectsSnapshot.val()) 
-        : 
+        Object.values(projectsSnapshot.val())
+        :
         [];
       return projects;
     });
   }
 
-  async createProject(createProjectDto: CreateProjectDto): Promise<string> {
+  async createProject(
+    userId: string,
+    createProjectDto: CreateProjectDto
+  ): Promise<string> {
     const db = admin.database();
-    const projectsRef = db.ref('/projects');
+    const projectsRef = db.ref(`/user-projects/${userId}`);
     const key = projectsRef.push(createProjectDto).key;
-    const newProjectRef = db.ref(`/projects/${key}`);
+    const newProjectRef = db.ref(`/user-projects/${userId}/${key}`);
     newProjectRef.update({ id: key })
     return key;
   }
