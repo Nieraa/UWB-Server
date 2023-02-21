@@ -8,12 +8,12 @@ import { RoomPlan } from './roomPlans.entity';
 export class RoomPlansService {
   async getRoomPlans(projectId: string): Promise<RoomPlan[]> {
     const db = admin.database();
-    const roomPlansRef = db.ref(`/projects/${projectId}/roomPlans`);
+    const roomPlansRef = db.ref(`/project-roomPlans/${projectId}`);
     return await roomPlansRef.once('value').then((roomPlansSnapshot) => {
-      const roomPlans: RoomPlan[] = roomPlansSnapshot.val() !== null ? Object.values(roomPlansSnapshot.val()) : [];
-      roomPlans.forEach(roomPlan => {
-        delete roomPlan.anchors;
-      })
+      const roomPlans: RoomPlan[] = roomPlansSnapshot.val() !== null ? 
+      Object.values(roomPlansSnapshot.val()) 
+      : 
+      [];
       return roomPlans;
     });
   }
