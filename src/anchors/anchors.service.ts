@@ -3,6 +3,7 @@ import * as admin from 'firebase-admin';
 import { CreateAnchorDto } from './dto/create-anchor-dto';
 import { UpdateAnchorDto } from './dto/update-anchor-dto';
 import { Anchor } from './anchors.entity';
+import { Reference } from 'firebase-admin/database';
 
 @Injectable()
 export class AnchorsService {
@@ -49,5 +50,16 @@ export class AnchorsService {
     const db = admin.database();
     const anchorRef = db.ref(`/roomPlan-anchors/${roomPlanId}/${anchorId}`);
     anchorRef.set({});
+  }
+
+  async isHaveAnchor(anchorRef: Reference): Promise<boolean> {
+    return await anchorRef.once('value').then((anchorSnapshot) => {
+      if (anchorSnapshot.val()) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    });
   }
 }
