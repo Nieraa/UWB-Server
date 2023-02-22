@@ -38,7 +38,9 @@ export class ProjectsService {
   ): Promise<void> {
     const db = admin.database();
     const projectRef = db.ref(`/user-projects/${userId}/${projectId}`);
-    projectRef.update(updateProjectDto);
+    if (await this.isHaveProject(projectRef)) {
+      projectRef.update(updateProjectDto);
+    }
   }
 
   async deleteProject(
