@@ -39,7 +39,9 @@ export class AnchorsService {
       newAnchorRef.update({ id: key });
       return key;
     }
-    return "Create Anchor failed";
+    else {
+      throw new NotFoundException();
+    }
   }
 
   async updateAnchor(
