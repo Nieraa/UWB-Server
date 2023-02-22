@@ -16,9 +16,7 @@ export class RoomPlansService {
       if (roomPlansSnapshot.val()) {
         return Object.values(roomPlansSnapshot.val())
       }
-      else {
-        throw new NotFoundException();
-      }
+      else { return [] }
     });
   }
 

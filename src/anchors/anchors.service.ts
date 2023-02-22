@@ -20,9 +20,7 @@ export class AnchorsService {
       if (anchorsSnapshot.val()) {
         return Object.values(anchorsSnapshot.val())
       }
-      else {
-        throw new NotFoundException();
-      }
+      else { return [] }
     });
   }
 

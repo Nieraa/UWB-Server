@@ -14,9 +14,7 @@ export class ProjectsService {
       if (projectsSnapshot.val()) {
         return Object.values(projectsSnapshot.val())
       }
-      else {
-        throw new NotFoundException();
-      }
+      else { return [] }
     });
   }
 
