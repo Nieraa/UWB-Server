@@ -5,6 +5,7 @@ import { UpdateAnchorDto } from './dto/update-anchor-dto';
 import { Anchor } from './anchors.entity';
 import { Reference } from 'firebase-admin/database';
 import { RoomPlansService } from 'src/roomPlans/roomPlans.service';
+import { NotFoundException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class AnchorsService {
@@ -48,7 +49,12 @@ export class AnchorsService {
   ): Promise<void> {
     const db = admin.database();
     const anchorRef = db.ref(`/roomPlan-anchors/${roomPlanId}/${anchorId}`);
-    anchorRef.update(updateAnchorDto);
+    if (await this.isHaveAnchor(anchorRef)) {
+      anchorRef.update(updateAnchorDto);
+    }
+    else {
+      throw new NotFoundException();
+    }
   }
 
   async deleteAnchor(
