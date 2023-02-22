@@ -11,11 +11,12 @@ export class ProjectsService {
     const db = admin.database();
     const projectsRef = db.ref(`/user-projects/${userId}`);
     return await projectsRef.once('value').then((projectsSnapshot) => {
-      const projects: Project[] = projectsSnapshot.val() !== null ?
-        Object.values(projectsSnapshot.val())
-        :
-        [];
-      return projects;
+      if (projectsSnapshot.val()) {
+        return Object.values(projectsSnapshot.val())
+      }
+      else {
+        throw new NotFoundException();
+      }
     });
   }
 

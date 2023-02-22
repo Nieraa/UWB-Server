@@ -13,11 +13,12 @@ export class RoomPlansService {
     const db = admin.database();
     const roomPlansRef = db.ref(`/project-roomPlans/${projectId}`);
     return await roomPlansRef.once('value').then((roomPlansSnapshot) => {
-      const roomPlans: RoomPlan[] = roomPlansSnapshot.val() !== null ? 
-      Object.values(roomPlansSnapshot.val()) 
-      : 
-      [];
-      return roomPlans;
+      if (roomPlansSnapshot.val()) {
+        return Object.values(roomPlansSnapshot.val())
+      }
+      else {
+        throw new NotFoundException();
+      }
     });
   }
 

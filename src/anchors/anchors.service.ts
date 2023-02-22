@@ -17,11 +17,12 @@ export class AnchorsService {
     const db = admin.database();
     const anchorsRef = db.ref(`/roomPlan-anchors/${roomPlanId}`);
     return await anchorsRef.once('value').then((anchorsSnapshot) => {
-      const anchors: Anchor[] = anchorsSnapshot.val() !== null ?
-      Object.values(anchorsSnapshot.val())
-      :
-      [];
-      return anchors;
+      if (anchorsSnapshot.val()) {
+        return Object.values(anchorsSnapshot.val())
+      }
+      else {
+        throw new NotFoundException();
+      }
     });
   }
 
