@@ -74,16 +74,12 @@ export class RoomPlansService {
     const db = admin.database();
     const roomPlanRef = db.ref(`/project-roomPlans/${projectId}/${roomPlanId}`);
     return await roomPlanRef.once('value').then((roomPlanSnapshot) => {
-      const roomPlan: RoomPlan = roomPlanSnapshot.val() !== null ? roomPlanSnapshot.val() : {
-        id: "",
-        name: "",
-        image: "",
-        xRatio: 0,
-        yRatio: 0,
-        xOrigin: 0,
-        yOrigin: 0
-      };
-      return roomPlan;
+      if (roomPlanSnapshot.val()) {
+        return roomPlanSnapshot.val();
+      }
+      else {
+        throw new NotFoundException();
+      }
     });
   }
 

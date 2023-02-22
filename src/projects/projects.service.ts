@@ -76,11 +76,12 @@ export class ProjectsService {
     const db = admin.database();
     const projectRef = db.ref(`/user-projects/${userId}/${projectId}`);
     return await projectRef.once('value').then((projectSnapshot) => {
-      const project: Project = projectSnapshot.val() !== null ? projectSnapshot.val() : {
-        id: "",
-        name: ""
-      };
-      return project;
+      if (projectSnapshot.val()) {
+        return projectSnapshot.val();
+      }
+      else {
+        throw new NotFoundException();
+      }
     });
   }
 
