@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import { Reference } from 'firebase-admin/database';
 import { CreateProjectDto } from './dto/create-project-dto';
 import { UpdateProjectDto } from './dto/update-project-dto';
 import { Project } from './projects.entity';
@@ -74,6 +75,17 @@ export class ProjectsService {
         name: ""
       };
       return project;
+    });
+  }
+
+  async isHaveProject(projectRef: Reference) {
+    projectRef.once('value').then((projectSnapshot) => {
+      if (projectSnapshot.val()) {
+        return true;
+      }
+      else {
+        return false;
+      }
     });
   }
 }
