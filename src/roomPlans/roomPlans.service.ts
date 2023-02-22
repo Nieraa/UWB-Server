@@ -46,7 +46,9 @@ export class RoomPlansService {
   ): Promise<void> {
     const db = admin.database();
     const roomPlanRef = db.ref(`/project-roomPlans/${projectId}/${roomPlanId}`);
+    const anchorsRef = db.ref(`/roomPlan-anchors/${roomPlanId}`);
     roomPlanRef.set({});
+    anchorsRef.set({});
   }
 
   async getRoomPlanbyId(

@@ -46,7 +46,20 @@ export class ProjectsService {
   ): Promise<void> {
     const db = admin.database();
     const projectRef = db.ref(`/user-projects/${userId}/${projectId}`);
+    const roomPlansRef = db.ref(`/project-roomPlans/${projectId}`);
+    const ids: string[] = await roomPlansRef.once('value').then((roomPlansSnapshot) => {
+      const roomPlanIds: string[] = roomPlansSnapshot.val() !== null ?
+        Object.keys(roomPlansSnapshot.val())
+        :
+        [];
+      return roomPlanIds;
+    });
     projectRef.set({});
+    roomPlansRef.set({});
+    for (let i = 0; i < ids.length; i++) {
+      const anchorsRef = db.ref(`/roomPlan-anchors/${ids[i]}`);
+      anchorsRef.set({});
+    }
   }
 
   async getProjectbyId(
