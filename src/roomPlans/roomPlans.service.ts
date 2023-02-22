@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { Reference } from 'firebase-admin/database';
+import { ProjectsService } from 'src/projects/projects.service';
 import { CreateRoomPlanDto } from './dto/create-roomPlan-dto';
 import { UpdateRoomPlanDto } from './dto/update-roomPlan-dto';
 import { RoomPlan } from './roomPlans.entity';
 
 @Injectable()
 export class RoomPlansService {
+  constructor(private readonly projectService: ProjectsService) {}
   async getRoomPlans(projectId: string): Promise<RoomPlan[]> {
     const db = admin.database();
     const roomPlansRef = db.ref(`/project-roomPlans/${projectId}`);
@@ -20,15 +22,20 @@ export class RoomPlansService {
   }
 
   async createRoomPlan(
+    userId: string,
     projectId: string,
     createRoomPlanDto: CreateRoomPlanDto
   ): Promise<string> {
     const db = admin.database();
-    const roomPlansRef = db.ref(`/project-roomPlans/${projectId}`);
-    const key = roomPlansRef.push(createRoomPlanDto).key;
-    const newRoomPlanRef = db.ref(`/project-roomPlans/${projectId}/${key}`);
-    newRoomPlanRef.update({ id: key })
-    return key;
+    const projectRef = db.ref(`/user-projects/${userId}/${projectId}`);
+    if (await this.projectService.isHaveProject(projectRef)) {
+      const roomPlansRef = db.ref(`/project-roomPlans/${projectId}`);
+      const key = roomPlansRef.push(createRoomPlanDto).key;
+      const newRoomPlanRef = db.ref(`/project-roomPlans/${projectId}/${key}`);
+      newRoomPlanRef.update({ id: key })
+      return key;
+    }
+    return "Create Room plan failed";
   }
 
   async updateRoomPlan(

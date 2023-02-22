@@ -26,10 +26,11 @@ export class RoomPlansController {
 
   @Post()
   async createRoomPlan(
+    @Param('userId') userId: string,
     @Param('projectId') projectId: string,
     @Body() createRoomPlanDto: CreateRoomPlanDto
   ): Promise<string> {
-    return this.roomPlansService.createRoomPlan(projectId, createRoomPlanDto);
+    return this.roomPlansService.createRoomPlan(userId, projectId, createRoomPlanDto);
   }
 
   @Patch(':roomPlanId')
