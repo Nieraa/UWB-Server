@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { Reference } from 'firebase-admin/database';
 import { ProjectsService } from 'src/projects/projects.service';
@@ -45,7 +45,12 @@ export class RoomPlansService {
   ): Promise<void> {
     const db = admin.database();
     const roomPlanRef = db.ref(`/project-roomPlans/${projectId}/${roomPlanId}`);
-    roomPlanRef.update(updateRoomPlanDto);
+    if (await this.isHaveRoomPlan(roomPlanRef)) {
+      roomPlanRef.update(updateRoomPlanDto);
+    }
+    else {
+      throw new NotFoundException();
+    }
   }
 
   async deleteRoomPlan(
