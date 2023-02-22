@@ -35,7 +35,9 @@ export class RoomPlansService {
       newRoomPlanRef.update({ id: key })
       return key;
     }
-    return "Create Room plan failed";
+    else {
+      throw new NotFoundException();
+    }
   }
 
   async updateRoomPlan(
