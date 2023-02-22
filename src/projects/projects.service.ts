@@ -78,8 +78,8 @@ export class ProjectsService {
     });
   }
 
-  async isHaveProject(projectRef: Reference) {
-    projectRef.once('value').then((projectSnapshot) => {
+  async isHaveProject(projectRef: Reference): Promise<boolean> {
+    return projectRef.once('value').then((projectSnapshot) => {
       if (projectSnapshot.val()) {
         return true;
       }
