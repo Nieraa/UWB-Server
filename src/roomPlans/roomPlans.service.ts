@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import { Reference } from 'firebase-admin/database';
 import { CreateRoomPlanDto } from './dto/create-roomPlan-dto';
 import { UpdateRoomPlanDto } from './dto/update-roomPlan-dto';
 import { RoomPlan } from './roomPlans.entity';
@@ -68,6 +69,17 @@ export class RoomPlansService {
         yOrigin: 0
       };
       return roomPlan;
+    });
+  }
+
+  async isHaveRoomPlan(roomPlanRef: Reference): Promise<boolean> {
+    return await roomPlanRef.once('value').then((roomPlanSnapshot) => {
+      if (roomPlanSnapshot.val()) {
+        return true;
+      }
+      else {
+        return false;
+      }
     });
   }
 }
