@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { Reference } from 'firebase-admin/database';
 import { CreateProjectDto } from './dto/create-project-dto';
@@ -40,6 +40,9 @@ export class ProjectsService {
     const projectRef = db.ref(`/user-projects/${userId}/${projectId}`);
     if (await this.isHaveProject(projectRef)) {
       projectRef.update(updateProjectDto);
+    }
+    else {
+      throw new NotFoundException();
     }
   }
 
