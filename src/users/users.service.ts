@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import * as admin from 'firebase-admin';
 import { CreateUserDto } from './dto/create-user-dto';
+import * as admin from 'firebase-admin';
 
 export type User = any;
 

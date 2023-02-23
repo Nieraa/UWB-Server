@@ -1,12 +1,12 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
-  Param,
-  Patch,
   Post,
-  UseGuards,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards
 } from '@nestjs/common';
 import { CreateAnchorDto } from './dto/create-anchor-dto';
 import { UpdateAnchorDto } from './dto/update-anchor-dto';

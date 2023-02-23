@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import * as admin from 'firebase-admin';
-import * as express from 'express';
-import * as functions from 'firebase-functions';
 import { ValidationPipe } from '@nestjs/common';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import { AppModule } from './app.module';
+import * as express from 'express';
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 
 const expressServer = express();
 
