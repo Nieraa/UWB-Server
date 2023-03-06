@@ -51,7 +51,7 @@ export class RoomPlansController {
   }
 
   @Get(':roomPlanId')
-  async getProjectbyId(
+  async getRoomPlanbyId(
     @Param('projectId') projectId: string,
     @Param('roomPlanId') roomPlanId: string
     ): Promise<RoomPlan> {
