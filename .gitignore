@@ -35,3 +35,6 @@ src/auth/constants.ts
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+.firebaserc
+firebase.json
